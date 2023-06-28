@@ -14,8 +14,11 @@ import {
 } from '@chakra-ui/react'
 
 const MessageForm = () => {
+    const date = new Date();
+    const currentTime = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
     const [frequency, setFrequency] = React.useState('')
-    const [time, setTime] = React.useState('')
+    const [time, setTime] = React.useState(currentTime)
     const [unit, setUnit] = React.useState('нв підрозділ')
 
     const handleFraquncyChange = (event) => setFrequency(event.target.value)
@@ -51,7 +54,7 @@ const MessageForm = () => {
 
             <FormControl>
                 <FormLabel>Назва підрозділу</FormLabel>
-                <Input onChange={setUnit} value={unit} />
+                <Input onChange={handleUnitChange} value={unit} />
             </FormControl>
 
             <FormControl mb={15}>
