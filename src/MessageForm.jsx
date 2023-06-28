@@ -24,7 +24,7 @@ const MessageForm = () => {
     const [unit, setUnit] = React.useState('нв підрозділ');
     const [coordinates, setCoordinates] = React.useState('');
 
-    const handleFraquncyChange = (event) => setFrequency(Number(event.target.value).toFixed(3));
+    const handleFraquncyChange = (event) => setFrequency(event.target.value);
     const handleTimeChange = (event) => setTime(event.target.value);
     const handleUnitChange = (event) => setUnit(event.target.value);
     const handleCoordinatesChange = (event) => setCoordinates(event.target.value);
@@ -34,18 +34,31 @@ const MessageForm = () => {
         return '00.0000';
     }
 
+    const formatFrequency = (unformatedFrequency) => {
+        if(unformatedFrequency) return Number(unformatedFrequency).toFixed(3);
+        return '000.000'
+    }
+
     const co = coordinates.split('\n');
 
     const coordinateX = formatCoordinate(co[0]);
     const coordinateY = formatCoordinate(co[1]);
-    const formattedFrequency = frequency || '000.000'
+    const formattedFrequency = formatFrequency(frequency);
 
     const formatedMessage = `${formattedFrequency}/${time}\n${unit}\nX:${coordinateX}\nY:${coordinateY}`;
+
+    const clearForm = () => {
+        setFrequency('');
+        setTime(currentTime);
+        setUnit('нв підрозділ');
+        setCoordinates('');
+    }
 
     const copyContent = async () => {
         try {
             await navigator.clipboard.writeText(formatedMessage);
             toast({ title: 'Скопійовано в буфер обміну', status: 'success' });
+            clearForm();
         } catch (err) {
             toast({ title: `'Помилка копіювання', ${err}`, status: 'error' });
         }
