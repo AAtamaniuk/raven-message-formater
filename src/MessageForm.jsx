@@ -1,5 +1,5 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
     FormControl,
     FormLabel,
@@ -11,71 +11,84 @@ import {
     CardBody,
     Text,
     Button,
-} from '@chakra-ui/react'
+} from '@chakra-ui/react';
 
 const MessageForm = () => {
     const date = new Date();
     const currentTime = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
-    const [frequency, setFrequency] = React.useState('')
-    const [time, setTime] = React.useState(currentTime)
-    const [unit, setUnit] = React.useState('нв підрозділ')
+    const [frequency, setFrequency] = React.useState('');
+    const [time, setTime] = React.useState(currentTime);
+    const [unit, setUnit] = React.useState('нв підрозділ');
+    const [coordinates, setCoordinates] = React.useState('');
 
-    const handleFraquncyChange = (event) => setFrequency(Number(event.target.value).toFixed(3))
-    const handleTimeChange = (event) => setTime(event.target.value)
-    const handleUnitChange = (event) => setUnit(event.target.value)
+    const handleFraquncyChange = (event) => setFrequency(Number(event.target.value).toFixed(3));
+    const handleTimeChange = (event) => setTime(event.target.value);
+    const handleUnitChange = (event) => setUnit(event.target.value);
+    const handleCoordinatesChange = (event) => setCoordinates(event.target.value);
 
-    const coordinateX = '48.4993';
-    const coordinateY = '38.7867';
-
-
-    const formatedMessage = `${frequency}/${time}\n${unit}\nX:${coordinateX}\nY:${coordinateY}`
-
-    const copyContent = async () => {
-    try {
-      await navigator.clipboard.writeText(formatedMessage);
-      console.log('Content copied to clipboard');
-    } catch (err) {
-      console.error('Failed to copy: ', err);
+    const formatCoordinate = (unformatedCoordinate) => {
+        if (unformatedCoordinate) return unformatedCoordinate.split(' ')[0].replace(',', '.');
+        return '00.0000';
     }
-  }
 
-    return (
-        <div>
-            <NumberInput precision={3}>
-                <FormLabel>Частота</FormLabel>
-                <NumberInputField onChange={handleFraquncyChange} value={frequency} />
-            </NumberInput>
+        const co = coordinates.split('\n');
 
-            <FormControl>
-                <FormLabel>Час</FormLabel>
-                <Input type='time' onChange={handleTimeChange} value={time} />
-            </FormControl>
+        const coordinateX = formatCoordinate(co[0]);
+        const coordinateY = formatCoordinate(co[1]);
+        const formattedFrequency = frequency || '000.000'
 
-            <FormControl>
-                <FormLabel>Назва підрозділу</FormLabel>
-                <Input onChange={handleUnitChange} value={unit} />
-            </FormControl>
+        const formatedMessage = `${formattedFrequency}/${time}\n${unit}\nX:${coordinateX}\nY:${coordinateY}`;
 
-            <FormControl mb={15}>
-                <FormLabel>Координати</FormLabel>
-                <Textarea />
-            </FormControl>
+        const copyContent = async () => {
+            try {
+                await navigator.clipboard.writeText(formatedMessage);
+                console.log('Content copied to clipboard');
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+            }
+        }
 
-            <Card mb={15}>
-                <CardBody>
-                    <Text>{`${frequency}/${time}`}</Text>
-                    <Text>{`${unit}`}</Text>
-                    <Text>{`X:${coordinateX}`}</Text>
-                    <Text>{`Y:${coordinateY}`}</Text>
-                </CardBody>
-            </Card>
+        return (
+            <div>
+                <NumberInput precision={3}>
+                    <FormLabel>Частота</FormLabel>
+                    <NumberInputField onChange={handleFraquncyChange} value={frequency} />
+                </NumberInput>
 
-            <Button onClick={copyContent}>Скопіювати</Button>
-        </div>
-    )
-}
+                <FormControl>
+                    <FormLabel>Час</FormLabel>
+                    <Input type='time' onChange={handleTimeChange} value={time} />
+                </FormControl>
 
-MessageForm.propTypes = {}
+                <FormControl>
+                    <FormLabel>Назва підрозділу</FormLabel>
+                    <Input onChange={handleUnitChange} value={unit} />
+                </FormControl>
 
-export default MessageForm
+                <FormControl mb={15}>
+                    <FormLabel>Координати</FormLabel>
+                    <Textarea 
+                    onChange={handleCoordinatesChange} 
+                    value={coordinates}
+                    resize={'none'} 
+                    />
+                </FormControl>
+
+                <Card mb={15}>
+                    <CardBody>
+                        <Text>{`${formattedFrequency}/${time}`}</Text>
+                        <Text>{`${unit}`}</Text>
+                        <Text>{`X:${coordinateX}`}</Text>
+                        <Text>{`Y:${coordinateY}`}</Text>
+                    </CardBody>
+                </Card>
+
+                <Button onClick={copyContent}>Скопіювати</Button>
+            </div>
+        )
+    }
+
+    MessageForm.propTypes = {}
+
+    export default MessageForm
