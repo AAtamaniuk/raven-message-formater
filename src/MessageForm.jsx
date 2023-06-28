@@ -21,7 +21,7 @@ const MessageForm = () => {
     const [time, setTime] = React.useState(currentTime)
     const [unit, setUnit] = React.useState('нв підрозділ')
 
-    const handleFraquncyChange = (event) => setFrequency(event.target.value)
+    const handleFraquncyChange = (event) => setFrequency(Number(event.target.value).toFixed(3))
     const handleTimeChange = (event) => setTime(event.target.value)
     const handleUnitChange = (event) => setUnit(event.target.value)
 
