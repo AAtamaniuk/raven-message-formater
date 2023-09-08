@@ -13,9 +13,10 @@ import {
     CardBody,
     Text,
     Button,
+    Tooltip,
     useToast
 } from '@chakra-ui/react';
-import { SmallCloseIcon, RepeatClockIcon } from '@chakra-ui/icons'
+import { SmallCloseIcon, RepeatClockIcon, CopyIcon } from '@chakra-ui/icons'
 
 const UNKNOWN_UNIT = 'нв підрозділ';
 const TOAST_POSITION = 'bottom-left';
@@ -32,11 +33,7 @@ const MessageForm = () => {
     const [coordinates, setCoordinates] = React.useState('');
     const ref = useRef(null)
 
-    const handleFraquncyChange = (event) => {
-        const { value } = event.target;
-        // if (ONLY_NUMBER_OR_DOT_REGEXP.test(value)) return;
-        setFrequency(value)
-    }
+    const handleFraquncyChange = (event) => setFrequency(event.target.value);
     const handleTimeChange = (event) => setTime(event.target.value);
     const handleUnitChange = (event) => setUnit(event.target.value);
     const handleCoordinatesChange = (event) => setCoordinates(event.target.value);
@@ -79,31 +76,54 @@ const MessageForm = () => {
         }
     }
 
+    const copyFrequency = async () => {
+        try {
+            await navigator.clipboard.writeText(frequency);
+            toast({ title: 'Частоту скопійовано в буфер обміну', status: 'success', position: TOAST_POSITION });
+        } catch (err) {
+            toast({ title: `'Помилка копіювання', ${err}`, status: 'error', position: TOAST_POSITION });
+        }
+    }
+
     return (
         <Box maxWidth="300px">
-            <NumberInput precision={3}>
-                <FormLabel>Частота</FormLabel>
-                <Input
-                    type='number'
-                    onChange={handleFraquncyChange}
-                    value={frequency}
-                    ref={ref}
-                />
-            </NumberInput>
+            <Box display='flex' alignItems='self-end'>
+                <FormControl mr='15px'>
+                    <FormLabel>Частота</FormLabel>
+                    <Input
+                        type='number'
+                        onChange={handleFraquncyChange}
+                        value={frequency}
+                        ref={ref}
+                    />
+                </FormControl>
+
+                <Tooltip label='Копіювати частоту' fontSize='sm'>
+                    <IconButton
+                        onClick={copyFrequency}
+                        variant='outline'
+                        aria-label='Clear unit'
+                        fontSize='20px'
+                        icon={<CopyIcon />}
+                    />
+                </Tooltip>
+            </Box>
 
             <Box display='flex' alignItems='self-end'>
                 <FormControl mr='15px'>
                     <FormLabel>Час</FormLabel>
                     <Input type='time' onChange={handleTimeChange} value={time} />
                 </FormControl>
-                <IconButton
-                    tabIndex='0'
-                    onClick={setCurrentTime}
-                    variant='outline'
-                    aria-label='Clear unit'
-                    fontSize='20px'
-                    icon={<RepeatClockIcon />}
-                />
+
+                <Tooltip label='Встановити поточний час' fontSize='sm'>
+                    <IconButton
+                        onClick={setCurrentTime}
+                        variant='outline'
+                        aria-label='Clear unit'
+                        fontSize='20px'
+                        icon={<RepeatClockIcon />}
+                    />
+                </Tooltip>
             </Box>
 
             <Box display='flex' alignItems='self-end'>
@@ -111,13 +131,16 @@ const MessageForm = () => {
                     <FormLabel>Назва підрозділу</FormLabel>
                     <Input onChange={handleUnitChange} value={unit} />
                 </FormControl>
-                <IconButton
-                    onClick={clearUnitForm}
-                    variant='outline'
-                    aria-label='Clear unit'
-                    fontSize='20px'
-                    icon={<SmallCloseIcon />}
-                />
+
+                <Tooltip label='Очистити поле' fontSize='sm'>
+                    <IconButton
+                        onClick={clearUnitForm}
+                        variant='outline'
+                        aria-label='Clear unit'
+                        fontSize='20px'
+                        icon={<SmallCloseIcon />}
+                    />
+                </Tooltip>
             </Box>
 
             <FormControl mb={15}>
