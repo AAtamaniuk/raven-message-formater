@@ -75,7 +75,6 @@ const MessageForm = () => {
                 <FormLabel>Частота</FormLabel>
                 <NumberInputField
                     onChange={handleFraquncyChange}
-                    onInvalid={() => console.log("INVALID")}
                     value={frequency}
                     ref={ref}
                 />
