@@ -1,9 +1,11 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
+    Box,
     FormControl,
     FormLabel,
     Input,
+    IconButton,
     NumberInput,
     NumberInputField,
     Textarea,
@@ -13,6 +15,7 @@ import {
     Button,
     useToast
 } from '@chakra-ui/react';
+import { SmallCloseIcon, RepeatClockIcon } from '@chakra-ui/icons'
 
 const UNKNOWN_UNIT = 'нв підрозділ';
 const TOAST_POSITION = 'bottom-left';
@@ -59,36 +62,53 @@ const MessageForm = () => {
         ref.current.focus();
     }
 
+    const clearUnitForm = () => setUnit('');
+    const setCurrentTime = () => setTime(currentTime);
+
     const copyContent = async () => {
         try {
             await navigator.clipboard.writeText(formatedMessage);
-            toast({ title: 'Скопійовано в буфер обміну', status: 'success',  position: TOAST_POSITION });
-            clearForm();
+            toast({ title: 'Скопійовано в буфер обміну', status: 'success', position: TOAST_POSITION });
         } catch (err) {
-            toast({ title: `'Помилка копіювання', ${err}`, status: 'error',  position: TOAST_POSITION });
+            toast({ title: `'Помилка копіювання', ${err}`, status: 'error', position: TOAST_POSITION });
         }
     }
 
     return (
-        <div>
+        <Box maxWidth="300px">
             <NumberInput precision={3}>
                 <FormLabel>Частота</FormLabel>
-                <NumberInputField
-                    onChange={handleFraquncyChange}
-                    value={frequency}
-                    ref={ref}
-                />
+                <NumberInputField onChange={handleFraquncyChange} value={frequency} ref={ref} />
             </NumberInput>
 
-            <FormControl>
-                <FormLabel>Час</FormLabel>
-                <Input type='time' onChange={handleTimeChange} value={time} />
-            </FormControl>
+            <Box display='flex' alignItems='self-end'>
+                <FormControl mr='15px'>
+                    <FormLabel>Час</FormLabel>
+                    <Input type='time' onChange={handleTimeChange} value={time} />
+                </FormControl>
+                <IconButton
+                    tabIndex='0'
+                    onClick={setCurrentTime}
+                    variant='outline'
+                    aria-label='Clear unit'
+                    fontSize='20px'
+                    icon={<RepeatClockIcon />}
+                />
+            </Box>
 
-            <FormControl>
-                <FormLabel>Назва підрозділу</FormLabel>
-                <Input onChange={handleUnitChange} value={unit} />
-            </FormControl>
+            <Box display='flex' alignItems='self-end'>
+                <FormControl mr='15px'>
+                    <FormLabel>Назва підрозділу</FormLabel>
+                    <Input onChange={handleUnitChange} value={unit} />
+                </FormControl>
+                <IconButton
+                    onClick={clearUnitForm}
+                    variant='outline'
+                    aria-label='Clear unit'
+                    fontSize='20px'
+                    icon={<SmallCloseIcon />}
+                />
+            </Box>
 
             <FormControl mb={15}>
                 <FormLabel>Координати</FormLabel>
@@ -108,8 +128,9 @@ const MessageForm = () => {
                 </CardBody>
             </Card>
 
-            <Button onClick={copyContent}>Скопіювати</Button>
-        </div>
+            <Button onClick={copyContent} colorScheme='blue' mr="15px">Скопіювати</Button>
+            <Button onClick={clearForm} colorScheme='red'>Oчистити</Button>
+        </Box >
     )
 }
 
