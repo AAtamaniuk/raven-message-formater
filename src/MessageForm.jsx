@@ -19,6 +19,7 @@ import { SmallCloseIcon, RepeatClockIcon } from '@chakra-ui/icons'
 
 const UNKNOWN_UNIT = 'нв підрозділ';
 const TOAST_POSITION = 'bottom-left';
+const ONLY_NUMBER_OR_DOT_REGEXP = /[^\d.]|\.(?=.*\.)/g;
 
 const MessageForm = () => {
     const date = new Date();
@@ -31,7 +32,11 @@ const MessageForm = () => {
     const [coordinates, setCoordinates] = React.useState('');
     const ref = useRef(null)
 
-    const handleFraquncyChange = (event) => setFrequency(event.target.value);
+    const handleFraquncyChange = (event) => {
+        const { value } = event.target;
+        // if (ONLY_NUMBER_OR_DOT_REGEXP.test(value)) return;
+        setFrequency(value)
+    }
     const handleTimeChange = (event) => setTime(event.target.value);
     const handleUnitChange = (event) => setUnit(event.target.value);
     const handleCoordinatesChange = (event) => setCoordinates(event.target.value);
@@ -78,7 +83,12 @@ const MessageForm = () => {
         <Box maxWidth="300px">
             <NumberInput precision={3}>
                 <FormLabel>Частота</FormLabel>
-                <NumberInputField onChange={handleFraquncyChange} value={frequency} ref={ref} />
+                <Input
+                    type='number'
+                    onChange={handleFraquncyChange}
+                    value={frequency}
+                    ref={ref}
+                />
             </NumberInput>
 
             <Box display='flex' alignItems='self-end'>
