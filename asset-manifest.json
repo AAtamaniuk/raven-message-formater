@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.js": "/raven-message-formater/static/js/main.dbb0276f.js",
-    "static/js/787.e79e9ceb.chunk.js": "/raven-message-formater/static/js/787.e79e9ceb.chunk.js",
+    "main.js": "/raven-message-formater/static/js/main.ffe4a818.js",
+    "static/js/787.c0d2203a.chunk.js": "/raven-message-formater/static/js/787.c0d2203a.chunk.js",
     "index.html": "/raven-message-formater/index.html",
-    "main.dbb0276f.js.map": "/raven-message-formater/static/js/main.dbb0276f.js.map",
-    "787.e79e9ceb.chunk.js.map": "/raven-message-formater/static/js/787.e79e9ceb.chunk.js.map"
+    "main.ffe4a818.js.map": "/raven-message-formater/static/js/main.ffe4a818.js.map",
+    "787.c0d2203a.chunk.js.map": "/raven-message-formater/static/js/787.c0d2203a.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.dbb0276f.js"
+    "static/js/main.ffe4a818.js"
   ]
 }
