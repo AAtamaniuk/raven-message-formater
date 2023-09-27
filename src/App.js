@@ -10,7 +10,7 @@ import {
   theme,
 } from '@chakra-ui/react';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
-import MessageForm from './MessageForm';
+import MessageForm from './components/MessageForm';
 
 function App() {
   return (
